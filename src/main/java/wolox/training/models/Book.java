@@ -10,7 +10,7 @@ import javax.persistence.Id;
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String isbn;
+    private String id;
     @Column()
     private String genre;
 
@@ -35,7 +35,14 @@ public class Book {
     @Column(nullable = false)
     private Integer pages;
 
+    @Column (nullable = false)
+    private String isbn;
+
     //Getters & setters
+    public String getId() {
+        return id;
+    }
+
     public String getGenre() {
         return genre;
     }
@@ -109,9 +116,8 @@ public class Book {
     }
 
     //Constructors
-    public Book(String isbn, String genre, String author, String image, String title, String subtitle, String publisher, String year,
-            Integer pages) {
-        this.isbn = isbn;
+    public Book(String genre, String author, String image, String title, String subtitle, String publisher, String year,
+            Integer pages, String isbn) {
         this.genre = genre;
         this.author = author;
         this.image = image;
@@ -120,5 +126,6 @@ public class Book {
         this.publisher = publisher;
         this.year = year;
         this.pages = pages;
+        this.isbn = isbn;
     }
 }
