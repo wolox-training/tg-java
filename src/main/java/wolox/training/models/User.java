@@ -3,6 +3,7 @@ package wolox.training.models;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,7 +32,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     @Column(nullable = false)
-    private List<Book> books = Collections.emptyList();
+    private List<Optional<Book>> books = Collections.emptyList();
 
     //Getters & setters
     public long getId() {
@@ -62,12 +63,8 @@ public class User {
         this.birthdate = birthdate;
     }
 
-    public List<Book> getBooks() {
-        return (List<Book>) Collections.unmodifiableList(books);
-    }
-
-    public void setBooks(List<Book> books) {
-        this.books = books;
+    public List<Optional<Book>> getBooks() {
+        return (List<Optional<Book>>) Collections.unmodifiableList(books);
     }
 
     //Constructors
@@ -81,12 +78,11 @@ public class User {
     }
 
     //Methods
-
     /**
      * This method adds a book object to a user's collection.
      * @param b: Book to be added (Book)
      */
-    void addBookToCollection(Book b){
+    public void addBookToCollection(Optional<Book> b){
         try {
             this.books.add(b);
         }catch(BookAlreadyOwnedException e){}
@@ -96,7 +92,7 @@ public class User {
      * This method removes a book from a user's collection.
      * @param b: Book to be removed (Book)
      */
-    void removeBookFromCollection(Book b){
+    public void removeBookFromCollection(Optional<Book> b){
         this.books.remove(b);
     }
 }
