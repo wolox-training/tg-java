@@ -81,12 +81,21 @@ public class User {
     }
 
     //Methods
+
+    /**
+     * This method adds a book object to a user's collection.
+     * @param b: Book to be added (Book)
+     */
     void addBookToCollection(Book b){
         try {
             this.books.add(b);
         }catch(BookAlreadyOwnedException e){}
     }
 
+    /**
+     * This method removes a book from a user's collection.
+     * @param b: Book to be removed (Book)
+     */
     void removeBookFromCollection(Book b){
         this.books.remove(b);
     }
