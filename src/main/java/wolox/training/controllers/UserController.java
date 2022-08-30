@@ -64,6 +64,11 @@ public class UserController {
         userRepository.deleteById(id);
     }
 
+    /**
+     * This method adds a book object to a user's collection.
+     * @param user: User who wants a book to be added (User)
+     * @param bookId: ID from the book to be added (long)
+     */
     @PostMapping
     void addBookToUsersCollection(@RequestBody User user, @PathVariable long bookId ){
         try {
@@ -72,6 +77,11 @@ public class UserController {
         }catch (BookNotFoundException e){}
     }
 
+    /**
+     * This method deletes a book objects from a user's collection.
+     * @param user: User who has a book on their collection (User)
+     * @param bookId: ID from the book to be removed (long)
+     */
     @DeleteMapping
     void removeBookFromUsersCollection(@RequestBody User user, @PathVariable long bookId){
         try{
