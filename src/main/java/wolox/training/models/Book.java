@@ -1,10 +1,12 @@
 package wolox.training.models;
 
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class Book {
@@ -13,7 +15,7 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column()
+    @Column
     private String genre;
 
     @Column(nullable = false)
@@ -31,7 +33,7 @@ public class Book {
     @Column(nullable = false)
     private String publisher;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name="publication_year")
     private String year;
 
     @Column(nullable = false)
@@ -40,11 +42,13 @@ public class Book {
     @Column(nullable = false)
     private String isbn;
 
+    @ManyToMany(mappedBy = "books")
+    private List<User> userList;
+
     //Getters & setters
     public long getId() {
         return id;
     }
-
     public void setId(long id){
         this.id = id;
     }
