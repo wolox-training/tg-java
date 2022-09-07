@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,7 +27,7 @@ import wolox.training.repositories.BookRepository;
 import wolox.training.repositories.UserRepository;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 @Api
 public class UserController {
 
@@ -46,12 +47,12 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    @GetMapping
+    @GetMapping("/username/{username}")
     public Optional<User> findByUsername(@PathVariable String username) {
         return userRepository.findByUsername(username);
     }
 
-    @PutMapping("/{username}")
+    @PutMapping("/{id}")
     public User updateUser(@RequestBody User user, @PathVariable long id) {
         if (user.getId() != id) {
             throw new UsernameMismatchException("Username does not match!");
@@ -63,7 +64,7 @@ public class UserController {
         return userRepository.save(user);
     }
 
-    @DeleteMapping("/{username}")
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         try {
             userRepository.findById(id);
@@ -75,9 +76,9 @@ public class UserController {
     /**
      * This method adds a book object to a user's collection.
      * @param user: User who wants a book to be added (User)
-     * @param bookId: ID from the book to be added (long)
+     * @param book: Book to be added (Book)
      */
-    @PostMapping
+    @PatchMapping("/{user}")
     @ApiOperation(value = "Given a book, add it to a user's collection", response= User.class)
     @ApiResponses(value = {
             @ApiResponse(code=200, message="Book successfully added to collection."),
@@ -86,9 +87,8 @@ public class UserController {
             @ApiResponse(code=404, message="The resource you were trying to reach is not found.")
     })
     void addBookToUsersCollection(@ApiParam(value="User who wants to add the book", required = true)
-    @RequestBody User user, @ApiParam(value="Book to be added", required = true) @PathVariable long bookId ){
+    @PathVariable User user, @ApiParam(value="Book to be added", required = true) @RequestBody Book book ){
         try {
-            Optional<Book> book = bookRepository.findById(bookId);
             user.addBookToCollection(book);
         }catch (BookNotFoundException e){}
     }
@@ -96,12 +96,11 @@ public class UserController {
     /**
      * This method deletes a book objects from a user's collection.
      * @param user: User who has a book on their collection (User)
-     * @param bookId: ID from the book to be removed (long)
+     * @param book: Book to be removed (Book)
      */
-    @DeleteMapping
-    void removeBookFromUsersCollection(@RequestBody User user, @PathVariable long bookId){
+    @GetMapping("/{user}")
+    void removeBookFromUsersCollection(@PathVariable User user, @RequestBody Book book){
         try{
-            Optional<Book> book = bookRepository.findById(bookId);
             user.removeBookFromCollection(book);
         }catch (BookNotFoundException e){}
     }

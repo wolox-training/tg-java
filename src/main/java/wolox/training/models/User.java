@@ -7,13 +7,15 @@ import io.swagger.annotations.ApiParam;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import wolox.training.exceptions.BookAlreadyOwnedException;
 
 /**
@@ -40,9 +42,11 @@ public class User {
     private LocalDate birthdate;
 
     @ApiModelProperty(notes = "The user's book collection, a list of all owned books.")
-    @OneToMany(mappedBy = "user")
-    @Column(nullable = false)
-    private List<Optional<Book>> books = Collections.emptyList();
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "bookList",
+            joinColumns = @JoinColumn(name="book_id", referencedColumnName = "id"),
+    inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"))
+    private List<Book> books = Collections.emptyList();
 
     //Getters & setters
     public long getId() {
@@ -73,8 +77,8 @@ public class User {
         this.birthdate = birthdate;
     }
 
-    public List<Optional<Book>> getBooks() {
-        return (List<Optional<Book>>) Collections.unmodifiableList(books);
+    public List<Book> getBooks() {
+        return (List<Book>) Collections.unmodifiableList(books);
     }
 
     //Constructors
@@ -93,7 +97,7 @@ public class User {
      * @param b: Book to be added (Book)
      */
     @ApiOperation(value = "Given a book, add it to the user's collection.")
-    public void addBookToCollection(@ApiParam(value="Book to be added", required = true) Optional<Book> b){
+    public void addBookToCollection(@ApiParam(value="Book to be added", required = true) Book b){
         try {
             this.books.add(b);
         }catch(BookAlreadyOwnedException e){}
@@ -104,7 +108,7 @@ public class User {
      * @param b: Book to be removed (Book)
      */
     @ApiOperation(value = "Given a book, delete it from a user's collection")
-    public void removeBookFromCollection(@ApiParam(value="Book to be deleted", required = true) Optional<Book> b){
+    public void removeBookFromCollection(@ApiParam(value="Book to be deleted", required = true) Book b){
         this.books.remove(b);
     }
 }
