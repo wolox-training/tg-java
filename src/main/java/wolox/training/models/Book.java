@@ -1,5 +1,6 @@
 package wolox.training.models;
 
+import com.google.common.base.Preconditions;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,15 +50,18 @@ public class Book {
     public long getId() {
         return id;
     }
-    public void setId(long id){
-        this.id = id;
-    }
+
     public String getGenre() {
         return genre;
     }
 
     public void setGenre(String genre) {
-        this.genre = genre;
+        try{
+            Preconditions.checkNotNull(genre, "Illegal Argument, parameter is null");
+            this.genre = genre;
+        }catch(NullPointerException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public String getAuthor() {
@@ -65,7 +69,12 @@ public class Book {
     }
 
     public void setAuthor(String author) {
-        this.author = author;
+        try{
+            Preconditions.checkNotNull(author, "Illegal Argument, parameter is null");
+            this.author = author;
+        }catch(NullPointerException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public String getImage() {
@@ -73,7 +82,12 @@ public class Book {
     }
 
     public void setImage(String image) {
-        this.image = image;
+        try{
+            Preconditions.checkNotNull(image, "Illegal Argument, parameter is null");
+            this.image = image;
+        }catch(NullPointerException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public String getTitle() {
@@ -81,7 +95,12 @@ public class Book {
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        try{
+            Preconditions.checkNotNull(title, "Illegal Argument, parameter is null");
+            this.title = title;
+        }catch(NullPointerException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public String getSubtitle() {
@@ -89,7 +108,12 @@ public class Book {
     }
 
     public void setSubtitle(String subtitle) {
-        this.subtitle = subtitle;
+        try{
+            Preconditions.checkNotNull(subtitle, "Illegal Argument, parameter is null");
+            this.subtitle = subtitle;
+        }catch(NullPointerException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public String getPublisher() {
@@ -97,7 +121,12 @@ public class Book {
     }
 
     public void setPublisher(String publisher) {
-        this.publisher = publisher;
+        try{
+            Preconditions.checkNotNull(publisher, "Illegal Argument, parameter is null");
+            this.publisher = publisher;
+        }catch(NullPointerException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public String getYear() {
@@ -105,7 +134,12 @@ public class Book {
     }
 
     public void setYear(String year) {
-        this.year = year;
+        try{
+            Preconditions.checkNotNull(year, "Illegal Argument, parameter is null");
+            this.year = year;
+        }catch(NullPointerException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public Integer getPages() {
@@ -113,7 +147,12 @@ public class Book {
     }
 
     public void setPages(Integer pages) {
-        this.pages = pages;
+        try{
+            Preconditions.checkNotNull(pages, "Illegal Argument, parameter is null");
+            this.pages = pages;
+        }catch(NullPointerException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public String getIsbn() {
@@ -121,7 +160,12 @@ public class Book {
     }
 
     public void setIsbn(String isbn) {
-        this.isbn = isbn;
+        try{
+            Preconditions.checkNotNull(isbn, "Illegal Argument, parameter is null");
+            this.isbn = isbn;
+        }catch(NullPointerException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     //Constructors

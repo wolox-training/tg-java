@@ -1,5 +1,6 @@
 package wolox.training.models;
 
+import com.google.common.base.Preconditions;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
@@ -58,7 +59,12 @@ public class User {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        try{
+            Preconditions.checkNotNull(username, "Illegal Argument, parameter is null");
+            this.username = username;
+        }catch(NullPointerException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public String getName() {
@@ -66,7 +72,13 @@ public class User {
     }
 
     public void setName(String name) {
-        this.name = name;
+        try{
+            Preconditions.checkNotNull(name, "Illegal Argument, parameter is null");
+            this.name = name;
+        }catch(NullPointerException e){
+            System.out.println(e.getMessage());
+        }
+
     }
 
     public LocalDate getBirthdate() {
@@ -74,7 +86,12 @@ public class User {
     }
 
     public void setBirthdate(LocalDate birthdate) {
-        this.birthdate = birthdate;
+        try{
+            Preconditions.checkNotNull(birthdate, "Illegal Argument, parameter is null");
+            this.birthdate = birthdate;
+        }catch(NullPointerException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public List<Book> getBooks() {
