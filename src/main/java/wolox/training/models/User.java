@@ -32,7 +32,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     @Column(nullable = false)
-    private List<Optional<Book>> books = Collections.emptyList();
+    private List<Book> books = Collections.emptyList();
 
     //Getters & setters
     public long getId() {
@@ -63,8 +63,8 @@ public class User {
         this.birthdate = birthdate;
     }
 
-    public List<Optional<Book>> getBooks() {
-        return (List<Optional<Book>>) Collections.unmodifiableList(books);
+    public List<Book> getBooks() {
+        return (List<Book>) Collections.unmodifiableList(books);
     }
 
     //Constructors
@@ -82,7 +82,7 @@ public class User {
      * This method adds a book object to a user's collection.
      * @param b: Book to be added (Book)
      */
-    public void addBookToCollection(Optional<Book> b){
+    public void addBookToCollection(Book b){
         try {
             this.books.add(b);
         }catch(BookAlreadyOwnedException e){}
@@ -92,7 +92,7 @@ public class User {
      * This method removes a book from a user's collection.
      * @param b: Book to be removed (Book)
      */
-    public void removeBookFromCollection(Optional<Book> b){
+    public void removeBookFromCollection(Book b){
         this.books.remove(b);
     }
 }

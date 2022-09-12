@@ -39,28 +39,25 @@ public class UserController {
     }
 
     @GetMapping
-    public Optional<User> findByUsername(@PathVariable String username) {
-        return userRepository.findByUsername(username);
+    public User findByUsername(@PathVariable String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(()->new UserNotFoundException("User not found!"));
     }
 
-    @PutMapping("/{username}")
-    public User updateUser(@RequestBody User user, @PathVariable long id) {
+    @PutMapping("/{id}")
+    public User updateUser(@RequestBody User user, @PathVariable long id){
         if (user.getId() != id) {
             throw new UsernameMismatchException("Username does not match!");
         }
-        try {
-            userRepository.findById(id);
-        } catch (UserNotFoundException e) {
-        }
+        userRepository.findById(id)
+                .orElseThrow(()->new UserNotFoundException("User not found!"));
         return userRepository.save(user);
     }
 
-    @DeleteMapping("/{username}")
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        try {
-            userRepository.findById(id);
-        } catch (UserNotFoundException e) {
-        }
+        userRepository.findById(id)
+                .orElseThrow(()->new UserNotFoundException("User not found!"));
         userRepository.deleteById(id);
     }
 
@@ -71,10 +68,8 @@ public class UserController {
      */
     @PostMapping
     void addBookToUsersCollection(@RequestBody User user, @PathVariable long bookId ){
-        try {
-            Optional<Book> book = bookRepository.findById(bookId);
-            user.addBookToCollection(book);
-        }catch (BookNotFoundException e){}
+        user.addBookToCollection(bookRepository.findById(bookId)
+                .orElseThrow(()->new BookNotFoundException("Book not found!")));
     }
 
     /**
@@ -84,10 +79,8 @@ public class UserController {
      */
     @DeleteMapping
     void removeBookFromUsersCollection(@RequestBody User user, @PathVariable long bookId){
-        try{
-            Optional<Book> book = bookRepository.findById(bookId);
-            user.removeBookFromCollection(book);
-        }catch (BookNotFoundException e){}
+        user.removeBookFromCollection(bookRepository.findById(bookId)
+                .orElseThrow(()-> new BookNotFoundException("Book not found!")));
     }
 
 
