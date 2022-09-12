@@ -43,7 +43,6 @@ public class Book {
     private String isbn;
 
     @ManyToMany(mappedBy = "books")
-    private List<User> userList;
 
     //Getters & setters
     public long getId() {
