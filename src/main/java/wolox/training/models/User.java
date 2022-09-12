@@ -3,6 +3,7 @@ package wolox.training.models;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -66,10 +67,6 @@ public class User {
         return (List<Book>) Collections.unmodifiableList(books);
     }
 
-    public void setBooks(List<Book> books) {
-        this.books = books;
-    }
-
     //Constructors
     public User() {
     }
@@ -81,12 +78,11 @@ public class User {
     }
 
     //Methods
-
     /**
      * This method adds a book object to a user's collection.
      * @param b: Book to be added (Book)
      */
-    void addBookToCollection(Book b){
+    public void addBookToCollection(Book b){
         try {
             this.books.add(b);
         }catch(BookAlreadyOwnedException e){}
@@ -96,7 +92,7 @@ public class User {
      * This method removes a book from a user's collection.
      * @param b: Book to be removed (Book)
      */
-    void removeBookFromCollection(Book b){
+    public void removeBookFromCollection(Book b){
         this.books.remove(b);
     }
 }
