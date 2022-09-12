@@ -13,11 +13,9 @@ import wolox.training.exceptions.BookIdMismatchException;
 import wolox.training.exceptions.BookNotFoundException;
 import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
-import org.springframework.ui.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -39,6 +37,12 @@ public class BookController {
         return bookRepository.findAll();
     }
 
+    @GetMapping("/{id}")
+    public Book findOne(@PathVariable Long id){
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException("Book not found: "+id));
+    }
+
     @GetMapping("/author/{bookAuthor}")
     public Optional<Book> findByAuthor(@PathVariable String bookAuthor) {
         return bookRepository.findByAuthor(bookAuthor);
@@ -49,9 +53,8 @@ public class BookController {
         if (book.getId() != id) {
             throw new BookIdMismatchException("Ids do not match!");
         }
-        try {
-            bookRepository.findById(id);
-        }catch(BookNotFoundException e){}
+        bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException("Book not found: "+id));
         return bookRepository.save(book);
     }
     @DeleteMapping("/{id}")
@@ -62,9 +65,5 @@ public class BookController {
         bookRepository.deleteById(id);
     }
 
-    @GetMapping("/greeting")
-    public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
-        model.addAttribute("name", name);
-        return "greeting";
-    }
 }
+
