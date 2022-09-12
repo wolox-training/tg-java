@@ -1,5 +1,6 @@
 package wolox.training.models;
 
+import com.google.common.base.Preconditions;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -48,14 +49,13 @@ public class Book {
     public long getId() {
         return id;
     }
-    public void setId(long id){
-        this.id = id;
-    }
+
     public String getGenre() {
         return genre;
     }
 
     public void setGenre(String genre) {
+        Preconditions.checkNotNull(genre, "Illegal Argument, parameter is null");
         this.genre = genre;
     }
 
@@ -64,6 +64,7 @@ public class Book {
     }
 
     public void setAuthor(String author) {
+        Preconditions.checkNotNull(author, "Illegal Argument, parameter is null");
         this.author = author;
     }
 
@@ -72,6 +73,7 @@ public class Book {
     }
 
     public void setImage(String image) {
+        Preconditions.checkNotNull(image, "Illegal Argument, parameter is null");
         this.image = image;
     }
 
@@ -80,6 +82,7 @@ public class Book {
     }
 
     public void setTitle(String title) {
+        Preconditions.checkNotNull(title, "Illegal Argument, parameter is null");
         this.title = title;
     }
 
@@ -88,6 +91,7 @@ public class Book {
     }
 
     public void setSubtitle(String subtitle) {
+        Preconditions.checkNotNull(subtitle, "Illegal Argument, parameter is null");
         this.subtitle = subtitle;
     }
 
@@ -96,6 +100,7 @@ public class Book {
     }
 
     public void setPublisher(String publisher) {
+        Preconditions.checkNotNull(publisher, "Illegal Argument, parameter is null");
         this.publisher = publisher;
     }
 
@@ -104,6 +109,7 @@ public class Book {
     }
 
     public void setYear(String year) {
+        Preconditions.checkNotNull(year, "Illegal Argument, parameter is null");
         this.year = year;
     }
 
@@ -112,6 +118,7 @@ public class Book {
     }
 
     public void setPages(Integer pages) {
+        Preconditions.checkNotNull(pages, "Illegal Argument, parameter is null");
         this.pages = pages;
     }
 
@@ -120,6 +127,7 @@ public class Book {
     }
 
     public void setIsbn(String isbn) {
+        Preconditions.checkNotNull(isbn, "Illegal Argument, parameter is null");
         this.isbn = isbn;
     }
 

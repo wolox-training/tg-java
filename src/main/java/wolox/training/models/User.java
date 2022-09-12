@@ -1,5 +1,6 @@
 package wolox.training.models;
 
+import com.google.common.base.Preconditions;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
@@ -58,6 +59,7 @@ public class User {
     }
 
     public void setUsername(String username) {
+        Preconditions.checkNotNull(username, "Illegal Argument, parameter is null");
         this.username = username;
     }
 
@@ -66,6 +68,7 @@ public class User {
     }
 
     public void setName(String name) {
+        Preconditions.checkNotNull(name, "Illegal Argument, parameter is null");
         this.name = name;
     }
 
@@ -74,6 +77,7 @@ public class User {
     }
 
     public void setBirthdate(LocalDate birthdate) {
+        Preconditions.checkNotNull(birthdate, "Illegal Argument, parameter is null");
         this.birthdate = birthdate;
     }
 
