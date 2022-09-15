@@ -59,12 +59,8 @@ public class User {
     }
 
     public void setUsername(String username) {
-        try{
-            Preconditions.checkNotNull(username, "Illegal Argument, parameter is null");
-            this.username = username;
-        }catch(NullPointerException e){
-            System.out.println(e.getMessage());
-        }
+        Preconditions.checkNotNull(username, "Illegal Argument, parameter is null");
+        this.username = username;
     }
 
     public String getName() {
@@ -72,13 +68,8 @@ public class User {
     }
 
     public void setName(String name) {
-        try{
-            Preconditions.checkNotNull(name, "Illegal Argument, parameter is null");
-            this.name = name;
-        }catch(NullPointerException e){
-            System.out.println(e.getMessage());
-        }
-
+        Preconditions.checkNotNull(name, "Illegal Argument, parameter is null");
+        this.name = name;
     }
 
     public LocalDate getBirthdate() {
@@ -86,12 +77,8 @@ public class User {
     }
 
     public void setBirthdate(LocalDate birthdate) {
-        try{
-            Preconditions.checkNotNull(birthdate, "Illegal Argument, parameter is null");
-            this.birthdate = birthdate;
-        }catch(NullPointerException e){
-            System.out.println(e.getMessage());
-        }
+        Preconditions.checkNotNull(birthdate, "Illegal Argument, parameter is null");
+        this.birthdate = birthdate;
     }
 
     public List<Book> getBooks() {
@@ -117,7 +104,9 @@ public class User {
     public void addBookToCollection(@ApiParam(value="Book to be added", required = true) Book b){
         try {
             this.books.add(b);
-        }catch(BookAlreadyOwnedException e){}
+        }catch(BookAlreadyOwnedException e){
+            System.out.println(e);
+        }
     }
 
     /**

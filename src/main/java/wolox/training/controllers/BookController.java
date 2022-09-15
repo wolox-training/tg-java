@@ -2,6 +2,7 @@ package wolox.training.controllers;
 
 import io.swagger.annotations.Api;
 import java.util.Optional;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,12 +45,14 @@ public class BookController {
     }
 
     @GetMapping("/author/{bookAuthor}")
-    public Optional<Book> findByAuthor(@PathVariable String bookAuthor) {
-        return bookRepository.findByAuthor(bookAuthor);
+    public Book findByAuthor(@PathVariable String bookAuthor) {
+        return bookRepository.findByAuthor(bookAuthor)
+                .orElseThrow(()-> new BookNotFoundException("Book not found!"));
     }
 
-    @PutMapping("/{id}")
-    public Book updateBook(@RequestBody Book book, @PathVariable Long id) {
+    @PutMapping("/id/{id}")
+    public Book updateBook(@RequestBody Book book, @PathVariable("id") Long id) {
+
         if (book.getId() != id) {
             throw new BookIdMismatchException("Ids do not match!");
         }
@@ -59,9 +62,8 @@ public class BookController {
     }
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        try {
-            bookRepository.findById(id);
-        }catch(BookNotFoundException e){}
+            bookRepository.findById(id)
+                    .orElseThrow(()->new BookNotFoundException("Book not found: "+id));
         bookRepository.deleteById(id);
     }
 
