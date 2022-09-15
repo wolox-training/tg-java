@@ -5,22 +5,22 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import java.util.Optional;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import wolox.training.exceptions.BookNotFoundException;
+import wolox.training.exceptions.UserIdMismatchException;
 import wolox.training.exceptions.UserNotFoundException;
-import wolox.training.exceptions.UsernameMismatchException;
 import wolox.training.models.Book;
 import wolox.training.models.User;
 import wolox.training.repositories.BookRepository;
@@ -47,29 +47,31 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    @GetMapping("/username/{username}")
-    public Optional<User> findByUsername(@PathVariable String username) {
-        return userRepository.findByUsername(username);
+    @GetMapping("/{username}")
+    public User findByUsername(@PathVariable String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(()->new UserNotFoundException("User not found! username: "+username));
     }
 
-    @PutMapping("/{id}")
+    @GetMapping("/bookList/{username}")
+    public List<Book> getBookList(@PathVariable String username){
+        return userRepository.findByUsername(username).get().getBooks();
+    }
+
+    @PutMapping("/id/{id}")
     public User updateUser(@RequestBody User user, @PathVariable long id) {
         if (user.getId() != id) {
-            throw new UsernameMismatchException("Username does not match!");
+            throw new UserIdMismatchException("User id does not match! ID: "+id);
         }
-        try {
-            userRepository.findById(id);
-        } catch (UserNotFoundException e) {
-        }
+        userRepository.findById(id)
+                .orElseThrow(()->new UserNotFoundException("User not found! ID: "+id));
         return userRepository.save(user);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        try {
-            userRepository.findById(id);
-        } catch (UserNotFoundException e) {
-        }
+        userRepository.findById(id)
+                .orElseThrow(()->new UserNotFoundException("User not found! ID: "+id));
         userRepository.deleteById(id);
     }
 
@@ -78,7 +80,7 @@ public class UserController {
      * @param user: User who wants a book to be added (User)
      * @param book: Book to be added (Book)
      */
-    @PatchMapping("/{user}")
+    @PutMapping("addBook/{username}")
     @ApiOperation(value = "Given a book, add it to a user's collection", response= User.class)
     @ApiResponses(value = {
             @ApiResponse(code=200, message="Book successfully added to collection."),
@@ -87,23 +89,27 @@ public class UserController {
             @ApiResponse(code=404, message="The resource you were trying to reach is not found.")
     })
     void addBookToUsersCollection(@ApiParam(value="User who wants to add the book", required = true)
-    @PathVariable User user, @ApiParam(value="Book to be added", required = true) @RequestBody Book book ){
-        try {
-            user.addBookToCollection(book);
-        }catch (BookNotFoundException e){}
+    @PathVariable String username, @ApiParam(value="Book to be added", required = true) @RequestParam long bookId ){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(()->new UserNotFoundException("User not found! username: "+username));
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(()->new BookNotFoundException("Book not found! ID: "+bookId));
+        user.addBookToCollection(book);
+        System.out.println(user.getBooks().size());
     }
 
     /**
      * This method deletes a book objects from a user's collection.
-     * @param user: User who has a book on their collection (User)
-     * @param book: Book to be removed (Book)
+     * @param username: Username of the user who has a book on their collection (String)
+     * @param bookId: ID of the book to be removed (long)
      */
-    @GetMapping("/{user}")
-    void removeBookFromUsersCollection(@PathVariable User user, @RequestBody Book book){
-        try{
-            user.removeBookFromCollection(book);
-        }catch (BookNotFoundException e){}
+    @PutMapping("/removeBook/{username}")
+    void removeBookFromUsersCollection(@PathVariable String username, @RequestParam long bookId){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(()->new UserNotFoundException("User not found! username: "+username));
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(()->new BookNotFoundException("Book not found! ID: "+bookId));
+        user.removeBookFromCollection(book);
+        System.out.println(user.getBooks().size());
     }
-
-
 }

@@ -104,7 +104,9 @@ public class User {
     public void addBookToCollection(@ApiParam(value="Book to be added", required = true) Book b){
         try {
             this.books.add(b);
-        }catch(BookAlreadyOwnedException e){}
+        }catch(BookAlreadyOwnedException e){
+            System.out.println(e);
+        }
     }
 
     /**
