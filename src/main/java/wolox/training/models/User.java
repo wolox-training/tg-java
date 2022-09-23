@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -17,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import wolox.training.exceptions.BookAlreadyOwnedException;
 
 /**
@@ -24,6 +26,7 @@ import wolox.training.exceptions.BookAlreadyOwnedException;
  */
 @Entity
 @ApiModel(description = "User operating the system.")
+@Table(name="Users")
 public class User {
 
     @Id
@@ -47,7 +50,7 @@ public class User {
     @JoinTable(name = "bookList",
             joinColumns = @JoinColumn(name="book_id", referencedColumnName = "id"),
     inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"))
-    private List<Book> books = Collections.emptyList();
+    private List<Book> books = new ArrayList<>();
 
     //Getters & setters
     public long getId() {

@@ -77,8 +77,8 @@ public class UserController {
 
     /**
      * This method adds a book object to a user's collection.
-     * @param user: User who wants a book to be added (User)
-     * @param book: Book to be added (Book)
+     * @param username: Username of the user who wants a book to be added (String)
+     * @param bookId: ID of Book to be added (Long)
      */
     @PutMapping("addBook/{username}")
     @ApiOperation(value = "Given a book, add it to a user's collection", response= User.class)

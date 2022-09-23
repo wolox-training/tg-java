@@ -135,9 +135,8 @@ public class Book {
     public Book(){
 
     }
-    public Book(long id, String genre, String author, String image, String title, String subtitle, String publisher, String year,
+    public Book(String genre, String author, String image, String title, String subtitle, String publisher, String year,
             Integer pages, String isbn) {
-        this.id = id;
         this.genre = genre;
         this.author = author;
         this.image = image;
