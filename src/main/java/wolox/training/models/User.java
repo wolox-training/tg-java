@@ -28,7 +28,6 @@ import wolox.training.exceptions.BookAlreadyOwnedException;
 @ApiModel(description = "User operating the system.")
 @Table(name="Users")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -36,6 +35,9 @@ public class User {
     @ApiModelProperty(notes = "The user's username, in alphanumeric characters.")
     @Column(nullable = false)
     private String username;
+
+    @Column(nullable = false, length = 60)
+    private String password;
 
     @ApiModelProperty(notes = "The user's real name, in plain text.")
     @Column(nullable = false)
@@ -64,6 +66,12 @@ public class User {
     public void setUsername(String username) {
         Preconditions.checkNotNull(username, "Illegal Argument, parameter is null");
         this.username = username;
+    }
+
+    public String getPassword(){ return password;}
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getName() {

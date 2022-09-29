@@ -27,7 +27,7 @@ public class BookController {
     @Autowired
     private BookRepository bookRepository;
 
-    @PostMapping
+    @PostMapping("/newBook/")
     @ResponseStatus(HttpStatus.CREATED)
     public Book create(@RequestBody Book book) {
         return bookRepository.save(book);
