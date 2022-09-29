@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiResponses;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,18 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @PostMapping("/newUser/")
+    public User registerNewUserAccount(@RequestBody User user){
+        User u = new User();
+        u.setUsername(user.getUsername());
+        u.setName(user.getName());
+        u.setBirthdate(user.getBirthdate());
+        u.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(u);
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -66,6 +79,21 @@ public class UserController {
         userRepository.findById(id)
                 .orElseThrow(()->new UserNotFoundException("User not found! ID: "+id));
         return userRepository.save(user);
+    }
+
+    @PutMapping("/updatePassword/{id}")
+    public User updatePassword(@RequestBody User user, @PathVariable long id){
+        if (user.getId() != id) {
+            throw new UserIdMismatchException("User id does not match! ID: "+id);
+        }
+        userRepository.findById(id)
+                .orElseThrow(()->new UserNotFoundException("User not found! ID: "+id));
+        User u = new User();
+        u.setUsername(user.getUsername());
+        u.setName(user.getName());
+        u.setBirthdate(user.getBirthdate());
+        u.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(u);
     }
 
     @DeleteMapping("/{id}")
