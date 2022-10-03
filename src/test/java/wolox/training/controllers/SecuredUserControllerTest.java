@@ -24,7 +24,7 @@ public class SecuredUserControllerTest {
     @MockBean
     private BookRepository mockBookRepository;
 
-    @WithMockUser(value = "spring")
+    @WithMockUser()
     @Test
     public void givenAuthRequestOnPrivateService_shouldSucceedWith200() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/api/users").contentType(MediaType.APPLICATION_JSON))
@@ -34,5 +34,12 @@ public class SecuredUserControllerTest {
     public void givenUnauthRequestOnPrivateService_shouldNotSucceedWith401() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/api/users").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError());
+    }
+
+    @WithMockUser
+    @Test
+    public void whenGetCurrentUser_thenShouldSucceed() throws Exception{
+        mvc.perform(MockMvcRequestBuilders.get("/api/users/currentUser")
+                .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 }

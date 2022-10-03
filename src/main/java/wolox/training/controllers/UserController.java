@@ -8,6 +8,8 @@ import io.swagger.annotations.ApiResponses;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import wolox.training.exceptions.BookNotFoundException;
@@ -39,7 +43,7 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PostMapping("/newUser/")
+    @PostMapping("/newUser")
     public User registerNewUserAccount(@RequestBody User user){
         User u = new User();
         u.setUsername(user.getUsername());
@@ -69,6 +73,13 @@ public class UserController {
     @GetMapping("/bookList/{username}")
     public List<Book> getBookList(@PathVariable String username){
         return userRepository.findByUsername(username).get().getBooks();
+    }
+
+    @GetMapping("/currentUser")
+    @ResponseBody
+    public String currentUserName() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
     }
 
     @PutMapping("/id/{id}")
