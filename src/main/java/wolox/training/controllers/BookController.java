@@ -1,8 +1,6 @@
 package wolox.training.controllers;
 
 import io.swagger.annotations.Api;
-import java.util.Optional;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +25,7 @@ public class BookController {
     @Autowired
     private BookRepository bookRepository;
 
-    @PostMapping("/newBook/")
+    @PostMapping("/newBook")
     @ResponseStatus(HttpStatus.CREATED)
     public Book create(@RequestBody Book book) {
         return bookRepository.save(book);
