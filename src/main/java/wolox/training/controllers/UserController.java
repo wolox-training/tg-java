@@ -39,7 +39,7 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PostMapping("/newUser/")
+    @PostMapping("/newUser")
     public User registerNewUserAccount(@RequestBody User user){
         User u = new User();
         u.setUsername(user.getUsername());
