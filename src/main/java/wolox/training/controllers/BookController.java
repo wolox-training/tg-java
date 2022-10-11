@@ -1,5 +1,6 @@
 package wolox.training.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 
 import org.springframework.http.HttpStatus;
@@ -54,7 +55,7 @@ public class BookController {
 
     @GetMapping("/isbn/{isbn}")
     @ResponseStatus(code=HttpStatus.OK)
-    public Book findByIsbn(@PathVariable String isbn){
+    public Book findByIsbn(@PathVariable String isbn) throws JsonProcessingException {
         return bookRepository.findByIsbn(isbn)
                 .orElse(create(openLibraryService.bookInfo(isbn)));
     }

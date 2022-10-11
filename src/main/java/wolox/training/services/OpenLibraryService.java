@@ -1,5 +1,8 @@
 package wolox.training.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -10,7 +13,10 @@ import wolox.training.models.Book;
 public class OpenLibraryService {
     private static final String API_URL = "https://openlibrary.org/api/";
     private final RestTemplate restTemplate = new RestTemplate();
-    public Book bookInfo(String isbn){
+
+
+    public Book bookInfo(String isbn) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
         URI uri = UriComponentsBuilder
                 .fromHttpUrl(API_URL)
                 .path("books")
@@ -19,9 +25,12 @@ public class OpenLibraryService {
                 .queryParam("jscmd","data")
                 .build()
                 .toUri();
-        OpenLibraryResponseDTO responseDTO = restTemplate
-                .getForEntity(uri, OpenLibraryResponseDTO.class)
+        String json = restTemplate
+                .getForEntity(uri, String.class)
                 .getBody();
+        JsonNode jsonNode = objectMapper.readTree(json);
+        String bookBody = jsonNode.get(isbn).asText();
+        OpenLibraryResponseDTO responseDTO = objectMapper.readValue(bookBody, OpenLibraryResponseDTO.class);
         return responseDTO.convertToBook();
     }
 }

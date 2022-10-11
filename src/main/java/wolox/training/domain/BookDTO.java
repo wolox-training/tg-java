@@ -3,7 +3,7 @@ package wolox.training.domain;
 import java.util.List;
 
 public class BookDTO {
-    //public String isbn_10;
+    public String isbn_10;
     public String title;
     public String subtitle;
     public String publisher;

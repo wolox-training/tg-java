@@ -27,6 +27,7 @@ dependencies {
 	implementation 'org.springframework.plugin:spring-plugin-core:1.2.0.RELEASE'
 	implementation 'com.google.guava:guava:31.1-jre'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.3'
 }
 
 tasks.named('test') {
