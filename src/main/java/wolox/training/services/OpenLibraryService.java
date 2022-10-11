@@ -7,7 +7,7 @@ import java.net.URI;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import wolox.training.domain.OpenLibraryResponseDTO;
+import wolox.training.domain.BookDTO;
 import wolox.training.models.Book;
 @Service
 public class OpenLibraryService {
@@ -29,8 +29,8 @@ public class OpenLibraryService {
                 .getForEntity(uri, String.class)
                 .getBody();
         JsonNode jsonNode = objectMapper.readTree(json);
-        String bookBody = jsonNode.get(isbn).asText();
-        OpenLibraryResponseDTO responseDTO = objectMapper.readValue(bookBody, OpenLibraryResponseDTO.class);
-        return responseDTO.convertToBook();
+        String bookBody = jsonNode.get(isbn).toString();
+        BookDTO bookDTO = objectMapper.readValue(bookBody, BookDTO.class);
+        return bookDTO.convertToBook(isbn);
     }
 }
