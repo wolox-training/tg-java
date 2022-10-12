@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.time.LocalDate;
 import java.util.List;
+import net.bytebuddy.asm.Advice.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -75,9 +76,14 @@ public class UserController {
     @GetMapping("/dates-name")
     public Iterable findByBirthdateInBetweenDatesAndName(@RequestParam String date1,
             @RequestParam String date2, @RequestParam String str){
-        //return userRepository.findByBirthdateAndName(date1, date2, name);
-        LocalDate d1 = LocalDate.parse(date1);
-        LocalDate d2 = LocalDate.parse(date2);
+        LocalDate d1, d2;
+        if(!date1.equals("null") && !date2.equals("null")) {
+            d1 = LocalDate.parse(date1);
+            d2 = LocalDate.parse(date2);
+        }else{
+            d1 = null;
+            d2 = null;
+        }
         return userRepository.findByBirthdateBetweenAndNameIgnoreCaseContaining(d1, d2, str);
     }
 
