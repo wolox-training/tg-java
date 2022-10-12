@@ -54,7 +54,7 @@ public class BookController {
     @GetMapping("/publisher-genre-year")
     public Iterable findByPublisherAndGenreAndYear(@RequestParam String publisher, @RequestParam String genre
             , @RequestParam String publicationYear){
-        return bookRepository.findByPublisherAndGenreAndPublicationYear(publisher, genre, publicationYear);
+        return bookRepository.findByPublisherOrGenreOrPublicationYear(publisher, genre, publicationYear);
     }
 
     @PutMapping("/id/{id}")
