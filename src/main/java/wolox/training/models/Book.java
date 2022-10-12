@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQuery;
+import org.springframework.data.jpa.repository.Query;
 
 @Entity
 public class Book {
@@ -34,8 +36,8 @@ public class Book {
     @Column(nullable = false)
     private String publisher;
 
-    @Column(nullable = false, name="publication_year")
-    private String year;
+    @Column(nullable = false)
+    private String publicationYear;
 
     @Column(nullable = false)
     private Integer pages;
@@ -105,12 +107,12 @@ public class Book {
     }
 
     public String getYear() {
-        return year;
+        return publicationYear;
     }
 
-    public void setYear(String year) {
-        Preconditions.checkNotNull(year, "Illegal Argument, parameter is null");
-        this.year = year;
+    public void setYear(String publicationYear) {
+        Preconditions.checkNotNull(publicationYear, "Illegal Argument, parameter is null");
+        this.publicationYear = publicationYear;
     }
 
     public Integer getPages() {
@@ -135,7 +137,7 @@ public class Book {
     public Book(){
 
     }
-    public Book(String genre, String author, String image, String title, String subtitle, String publisher, String year,
+    public Book(String genre, String author, String image, String title, String subtitle, String publisher, String publicationYear,
             Integer pages, String isbn) {
         this.genre = genre;
         this.author = author;
@@ -143,7 +145,7 @@ public class Book {
         this.title = title;
         this.subtitle = subtitle;
         this.publisher = publisher;
-        this.year = year;
+        this.publicationYear = publicationYear;
         this.pages = pages;
         this.isbn = isbn;
     }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import wolox.training.exceptions.BookIdMismatchException;
 import wolox.training.exceptions.BookNotFoundException;
@@ -27,13 +28,13 @@ public class BookController {
     @Autowired
     private BookRepository bookRepository;
 
-    @PostMapping("/newBook/")
+    @PostMapping("/newBook")
     @ResponseStatus(HttpStatus.CREATED)
     public Book create(@RequestBody Book book) {
         return bookRepository.save(book);
     }
 
-    @GetMapping
+    @GetMapping("/allBooks")
     public Iterable findAll(){
         return bookRepository.findAll();
     }
@@ -48,6 +49,12 @@ public class BookController {
     public Book findByAuthor(@PathVariable String bookAuthor) {
         return bookRepository.findByAuthor(bookAuthor)
                 .orElseThrow(()-> new BookNotFoundException("Book not found!"));
+    }
+
+    @GetMapping("/publisher-genre-year")
+    public Iterable findByPublisherAndGenreAndYear(@RequestParam String publisher, @RequestParam String genre
+            , @RequestParam String publicationYear){
+        return bookRepository.findByPublisherAndGenreAndPublicationYear(publisher, genre, publicationYear);
     }
 
     @PutMapping("/id/{id}")

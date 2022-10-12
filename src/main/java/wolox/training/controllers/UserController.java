@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,7 +40,7 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PostMapping("/newUser/")
+    @PostMapping("/newUser")
     public User registerNewUserAccount(@RequestBody User user){
         User u = new User();
         u.setUsername(user.getUsername());
@@ -69,6 +70,15 @@ public class UserController {
     @GetMapping("/bookList/{username}")
     public List<Book> getBookList(@PathVariable String username){
         return userRepository.findByUsername(username).get().getBooks();
+    }
+
+    @GetMapping("/dates-name")
+    public Iterable findByBirthdateInBetweenDatesAndName(@RequestParam String date1,
+            @RequestParam String date2, @RequestParam String str){
+        //return userRepository.findByBirthdateAndName(date1, date2, name);
+        LocalDate d1 = LocalDate.parse(date1);
+        LocalDate d2 = LocalDate.parse(date2);
+        return userRepository.findByBirthdateBetweenAndNameIgnoreCaseContaining(d1, d2, str);
     }
 
     @PutMapping("/id/{id}")

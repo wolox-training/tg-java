@@ -43,7 +43,7 @@ public class User {
     @Column(nullable = false)
     private String name;
 
-    @ApiModelProperty(notes = "The user's birthdate, in a Date object.")
+    @ApiModelProperty(notes = "The user's birthdate, in a LocalDate object.")
     @Column(nullable = false)
     private LocalDate birthdate;
 
