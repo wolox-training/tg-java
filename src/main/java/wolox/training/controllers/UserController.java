@@ -41,7 +41,7 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PostMapping("/newUser")
+    @PostMapping("/new")
     public User registerNewUserAccount(@RequestBody User user){
         User u = new User();
         u.setUsername(user.getUsername());
@@ -57,7 +57,7 @@ public class UserController {
         return userRepository.save(user);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public Iterable findAll() {
         return userRepository.findAll();
     }

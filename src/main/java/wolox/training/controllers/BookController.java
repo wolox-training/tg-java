@@ -28,15 +28,29 @@ public class BookController {
     @Autowired
     private BookRepository bookRepository;
 
-    @PostMapping("/newBook")
+    @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
     public Book create(@RequestBody Book book) {
         return bookRepository.save(book);
     }
 
-    @GetMapping("/allBooks")
-    public Iterable findAll(){
-        return bookRepository.findAll();
+    @GetMapping("/all")
+    public Iterable findAll(@RequestParam String id, @RequestParam String genre, @RequestParam String author,
+            @RequestParam String image, @RequestParam String title, @RequestParam String subtitle,
+            @RequestParam String publicationYear, @RequestParam String pages, @RequestParam String isbn){
+        int pagesNumber;
+        long idNumber;
+        if(pages.equals("null") || pages.isEmpty())
+            pagesNumber = 0;
+        else
+            pagesNumber = Integer.parseInt(pages);
+
+        if(id.equals("null") || id.isEmpty())
+            idNumber = 0;
+        else
+            idNumber = Long.parseLong(id);
+
+        return bookRepository.findAll(idNumber, genre, author, image, title, subtitle, publicationYear, pagesNumber, isbn);
     }
 
     @GetMapping("/{id}")
