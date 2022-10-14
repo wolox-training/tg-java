@@ -9,6 +9,9 @@ import java.time.LocalDate;
 import java.util.List;
 import net.bytebuddy.asm.Advice.Local;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,6 +37,8 @@ import wolox.training.repositories.UserRepository;
 @Api
 public class UserController {
 
+    private final static int PAGE_SIZE = 10;
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -58,8 +63,8 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public Iterable findAll() {
-        return userRepository.findAll();
+    public Page<User> findAll(@RequestParam int pageNumber) {
+        return userRepository.findAll(PageRequest.of(pageNumber, PAGE_SIZE));
     }
 
     @GetMapping("/{username}")
@@ -74,8 +79,8 @@ public class UserController {
     }
 
     @GetMapping("/dates-name")
-    public Iterable findByBirthdateInBetweenDatesAndName(@RequestParam String date1,
-            @RequestParam String date2, @RequestParam String str){
+    public Page<User> findByBirthdateInBetweenDatesAndName(@RequestParam String date1,
+            @RequestParam String date2, @RequestParam String str, @RequestParam int pageNumber){
         LocalDate d1, d2;
         if(!date1.equals("null") && !date2.equals("null")) {
             d1 = LocalDate.parse(date1);
@@ -84,7 +89,8 @@ public class UserController {
             d1 = null;
             d2 = null;
         }
-        return userRepository.findByBirthdateBetweenAndNameIgnoreCaseContaining(d1, d2, str);
+        return userRepository.findByBirthdateBetweenAndNameIgnoreCaseContaining(d1,
+                d2, str, PageRequest.of(pageNumber, PAGE_SIZE));
     }
 
     @PutMapping("/id/{id}")

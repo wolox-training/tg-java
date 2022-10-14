@@ -1,8 +1,9 @@
 package wolox.training.controllers;
 
 import io.swagger.annotations.Api;
-import java.util.Optional;
-import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Api
 public class BookController {
 
+    private final static int PAGE_SIZE = 10;
+
     @Autowired
     private BookRepository bookRepository;
 
@@ -35,22 +38,23 @@ public class BookController {
     }
 
     @GetMapping("/all")
-    public Iterable findAll(@RequestParam String id, @RequestParam String genre, @RequestParam String author,
+    public Page<Book> findAll(@RequestParam String id, @RequestParam String genre, @RequestParam String author,
             @RequestParam String image, @RequestParam String title, @RequestParam String subtitle,
-            @RequestParam String publicationYear, @RequestParam String pages, @RequestParam String isbn){
-        int pagesNumber;
+            @RequestParam String publicationYear, @RequestParam String pages, @RequestParam String isbn,
+            @RequestParam int pageNumber){
+        int numberOfPages;
         long idNumber;
         if(pages.equals("null") || pages.isEmpty())
-            pagesNumber = 0;
+            numberOfPages = 0;
         else
-            pagesNumber = Integer.parseInt(pages);
-
+            numberOfPages = Integer.parseInt(pages);
         if(id.equals("null") || id.isEmpty())
             idNumber = 0;
         else
             idNumber = Long.parseLong(id);
 
-        return bookRepository.findAll(idNumber, genre, author, image, title, subtitle, publicationYear, pagesNumber, isbn);
+        return bookRepository.findAll(idNumber, genre, author, image, title, subtitle,
+                publicationYear, numberOfPages, isbn, PageRequest.of(pageNumber, PAGE_SIZE));
     }
 
     @GetMapping("/{id}")
@@ -66,9 +70,10 @@ public class BookController {
     }
 
     @GetMapping("/publisher-genre-year")
-    public Iterable findByPublisherAndGenreAndYear(@RequestParam String publisher, @RequestParam String genre
-            , @RequestParam String publicationYear){
-        return bookRepository.findByPublisherOrGenreOrPublicationYear(publisher, genre, publicationYear);
+    public Page<Book> findByPublisherAndGenreAndYear(@RequestParam String publisher, @RequestParam String genre,
+            @RequestParam String publicationYear, @RequestParam int pageNumber){
+        return bookRepository.findByPublisherOrGenreOrPublicationYear(publisher, genre,
+                publicationYear, PageRequest.of(pageNumber, PAGE_SIZE));
     }
 
     @PutMapping("/id/{id}")
@@ -87,6 +92,4 @@ public class BookController {
                     .orElseThrow(()->new BookNotFoundException("Book not found: "+id));
         bookRepository.deleteById(id);
     }
-
 }
-
