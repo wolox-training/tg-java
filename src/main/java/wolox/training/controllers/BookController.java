@@ -1,8 +1,10 @@
 package wolox.training.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
-import java.util.Optional;
-import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,24 +21,44 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import wolox.training.services.OpenLibraryService;
 
 @RestController
 @RequestMapping("/api/books")
 @Api
 public class BookController {
 
+    private final static int PAGE_SIZE = 10;
+
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    public OpenLibraryService openLibraryService;
 
-    @PostMapping("/newBook")
+    @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
     public Book create(@RequestBody Book book) {
         return bookRepository.save(book);
     }
 
-    @GetMapping("/allBooks")
-    public Iterable findAll(){
-        return bookRepository.findAll();
+    @GetMapping("/all")
+    public Page<Book> findAll(@RequestParam String id, @RequestParam String genre, @RequestParam String author,
+            @RequestParam String image, @RequestParam String title, @RequestParam String subtitle,
+            @RequestParam String publicationYear, @RequestParam String pages, @RequestParam String isbn,
+            @RequestParam int pageNumber){
+        int numberOfPages;
+        long idNumber;
+        if(pages.equals("null") || pages.isEmpty())
+            numberOfPages = 0;
+        else
+            numberOfPages = Integer.parseInt(pages);
+        if(id.equals("null") || id.isEmpty())
+            idNumber = 0;
+        else
+            idNumber = Long.parseLong(id);
+
+        return bookRepository.findAll(idNumber, genre, author, image, title, subtitle,
+                publicationYear, numberOfPages, isbn, PageRequest.of(pageNumber, PAGE_SIZE));
     }
 
     @GetMapping("/{id}")
@@ -51,10 +73,19 @@ public class BookController {
                 .orElseThrow(()-> new BookNotFoundException("Book not found!"));
     }
 
+
     @GetMapping("/publisher-genre-year")
-    public Iterable findByPublisherAndGenreAndYear(@RequestParam String publisher, @RequestParam String genre
-            , @RequestParam String publicationYear){
-        return bookRepository.findByPublisherOrGenreOrPublicationYear(publisher, genre, publicationYear);
+    public Page<Book> findByPublisherAndGenreAndYear(@RequestParam String publisher, @RequestParam String genre,
+            @RequestParam String publicationYear, @RequestParam int pageNumber) {
+        return bookRepository.findByPublisherOrGenreOrPublicationYear(publisher, genre,
+                publicationYear, PageRequest.of(pageNumber, PAGE_SIZE));
+    }
+
+    @GetMapping("/isbn/{isbn}")
+    @ResponseStatus(code=HttpStatus.OK)
+    public Book findByIsbn(@PathVariable String isbn) throws JsonProcessingException {
+        return bookRepository.findByIsbn(isbn)
+                .orElse(create(openLibraryService.bookInfo(isbn)));
     }
 
     @PutMapping("/id/{id}")
@@ -73,6 +104,4 @@ public class BookController {
                     .orElseThrow(()->new BookNotFoundException("Book not found: "+id));
         bookRepository.deleteById(id);
     }
-
 }
-

@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import wolox.training.models.Book;
@@ -95,20 +96,16 @@ class BookControllerTest {
         Book testBook = new Book("Science Fiction","George Orwell","cover_image.jpg"
                 ,"1984","-","Secker & Warburg","1949",328,"470015866");
         assertThrows(org.springframework.web.util.NestedServletException.class, () -> {
-            Mockito.when(mockBookRepository.findByAuthor("George Orwell")).thenReturn(Optional.of(testBook));
-            MockMvcRequestBuilders.get("/api/books/Aldous Huxley").contentType(MediaType.APPLICATION_JSON);
+            Mockito.when(mockBookRepository.findByAuthor("George Orwell")).thenReturn(null);
+            mvc.perform(MockMvcRequestBuilders.get("/api/books/author/Aldous Huxley").contentType(MediaType.APPLICATION_JSON));
         });
     }
 
     @Test
-    void create() {
-    }
-
-    @Test
-    void updateBook() {
-    }
-
-    @Test
-    void delete() {
+    @WithMockUser
+    void whenSearchByIsbnAndDoesNotExist_thenThrowException() throws Exception {
+        Mockito.when(mockBookRepository.findByIsbn("123")).thenReturn(null);
+        mvc.perform(MockMvcRequestBuilders.get("/api/books/isbn/123")
+                .contentType(MediaType.APPLICATION_JSON));
     }
 }
