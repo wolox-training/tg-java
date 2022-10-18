@@ -1,5 +1,6 @@
 package wolox.training.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import wolox.training.services.OpenLibraryService;
 
 @RestController
 @RequestMapping("/api/books")
@@ -30,6 +32,8 @@ public class BookController {
 
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    public OpenLibraryService openLibraryService;
 
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
@@ -69,11 +73,19 @@ public class BookController {
                 .orElseThrow(()-> new BookNotFoundException("Book not found!"));
     }
 
+
     @GetMapping("/publisher-genre-year")
     public Page<Book> findByPublisherAndGenreAndYear(@RequestParam String publisher, @RequestParam String genre,
-            @RequestParam String publicationYear, @RequestParam int pageNumber){
+            @RequestParam String publicationYear, @RequestParam int pageNumber) {
         return bookRepository.findByPublisherOrGenreOrPublicationYear(publisher, genre,
                 publicationYear, PageRequest.of(pageNumber, PAGE_SIZE));
+    }
+
+    @GetMapping("/isbn/{isbn}")
+    @ResponseStatus(code=HttpStatus.OK)
+    public Book findByIsbn(@PathVariable String isbn) throws JsonProcessingException {
+        return bookRepository.findByIsbn(isbn)
+                .orElse(create(openLibraryService.bookInfo(isbn)));
     }
 
     @PutMapping("/id/{id}")
