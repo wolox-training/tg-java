@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 //@EnableJpaRepositories
 @EntityScan
-@ComponentScan
+@ComponentScan("wolox.training.security")
 @SpringBootApplication
 public class TrainingApplication {
 
