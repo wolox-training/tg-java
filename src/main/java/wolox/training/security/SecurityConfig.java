@@ -17,7 +17,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @EnableWebSecurity
 @Configuration
-@ComponentScan("wolox.training.security")
 public class SecurityConfig {
 
     @Bean
