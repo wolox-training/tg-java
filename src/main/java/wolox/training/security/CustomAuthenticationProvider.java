@@ -28,7 +28,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     public DaoAuthenticationProvider authProvider(){
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(SecurityConfig.passwordEncoder());
+        //authProvider.setPasswordEncoder(SecurityConfig.passwordEncoder());
         return authProvider;
     }
 
