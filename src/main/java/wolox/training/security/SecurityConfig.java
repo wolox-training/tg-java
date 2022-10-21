@@ -19,6 +19,11 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
+    protected void configure(HttpSecurity security) throws Exception {
+        security
+                .httpBasic().disable()
+                .formLogin().disable();
+    }
     @Bean
     public UserDetailsService userDetailsService(BCryptPasswordEncoder bCryptPasswordEncoder) {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
