@@ -57,11 +57,11 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
+    /*@Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
                 .antMatchers("/api/users/new", "/api/books/new", "/");
-    }
+    }*/
 
     @Bean
     public static BCryptPasswordEncoder passwordEncoder(){
