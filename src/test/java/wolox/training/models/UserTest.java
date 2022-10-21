@@ -14,7 +14,7 @@ import wolox.training.repositories.UserRepository;
 @DataJpaTest
 
 class UserTest {
-
+/*
     @Autowired
     private TestEntityManager entityManager;
     @Autowired
@@ -60,4 +60,6 @@ class UserTest {
             userRepository.save(testUser);
         });
     }
+
+ */
 }

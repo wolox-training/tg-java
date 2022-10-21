@@ -16,6 +16,7 @@ import wolox.training.repositories.UserRepository;
 
 @WebMvcTest(UserController.class)
 public class SecuredUserControllerTest {
+    /*
     @Autowired
     private MockMvc mvc;
 
@@ -35,4 +36,6 @@ public class SecuredUserControllerTest {
         mvc.perform(MockMvcRequestBuilders.get("/api/users").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError());
     }
+
+     */
 }

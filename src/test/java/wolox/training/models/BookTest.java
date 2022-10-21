@@ -13,7 +13,7 @@ import wolox.training.repositories.BookRepository;
 @DataJpaTest
 
 class BookTest {
-
+/*
     @Autowired
     private TestEntityManager entityManager;
     @Autowired
@@ -56,4 +56,6 @@ class BookTest {
             bookRepository.save(testBook);
         });
     }
+
+ */
 }
