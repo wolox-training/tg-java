@@ -64,8 +64,8 @@ public class SecurityConfig {
                 .antMatchers("/api/users/new", "/api/books/new");
     }
 
-    /*@Bean
-    public PasswordEncoder encoder(){
+    @Bean
+    public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
-    }*/
+    }
 }
