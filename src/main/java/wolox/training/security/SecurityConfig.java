@@ -19,11 +19,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    protected void configure(HttpSecurity security) throws Exception {
-        security
-                .httpBasic().disable()
-                .formLogin().disable();
-    }
     @Bean
     public UserDetailsService userDetailsService(BCryptPasswordEncoder bCryptPasswordEncoder) {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
@@ -40,8 +35,11 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf()
-                .disable()
+        http.cors().and().csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/").permitAll()
+                .anyRequest().authenticated();
+                /*.disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.DELETE)
                 .hasRole("ADMIN")
@@ -57,7 +55,7 @@ public class SecurityConfig {
                 .httpBasic()
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);*/
 
         return http.build();
     }
@@ -65,7 +63,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
-                .antMatchers("/api/users/new", "/api/books/new");
+                .antMatchers("/api/users/new", "/api/books/new", "/");
     }
 
     @Bean
