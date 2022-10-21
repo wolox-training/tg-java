@@ -19,16 +19,16 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @Bean
+    /*@Bean
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder(11);
-    }
+    }*/
 
     @Bean
     public DaoAuthenticationProvider authProvider(){
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(encoder());
+        authProvider.setPasswordEncoder(SecurityConfig.passwordEncoder());
         return authProvider;
     }
 
