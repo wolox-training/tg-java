@@ -19,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import lombok.Data;
 import wolox.training.exceptions.BookAlreadyOwnedException;
 
 /**
@@ -27,6 +28,7 @@ import wolox.training.exceptions.BookAlreadyOwnedException;
 @Entity
 @ApiModel(description = "User operating the system.")
 @Table(name="Users")
+@Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -55,36 +57,15 @@ public class User {
     private List<Book> books = new ArrayList<>();
 
     //Getters & setters
-    public long getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
 
     public void setUsername(String username) {
         Preconditions.checkNotNull(username, "Illegal Argument, parameter is null");
         this.username = username;
     }
 
-    public String getPassword(){ return password;}
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     public void setName(String name) {
         Preconditions.checkNotNull(name, "Illegal Argument, parameter is null");
         this.name = name;
-    }
-
-    public LocalDate getBirthdate() {
-        return birthdate;
     }
 
     public void setBirthdate(LocalDate birthdate) {
@@ -94,16 +75,6 @@ public class User {
 
     public List<Book> getBooks() {
         return (List<Book>) Collections.unmodifiableList(books);
-    }
-
-    //Constructors
-    public User() {
-    }
-
-    public User(String username, String name, LocalDate birthdate) {
-        this.username = username;
-        this.name = name;
-        this.birthdate = birthdate;
     }
 
     //Methods

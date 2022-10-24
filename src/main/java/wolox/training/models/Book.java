@@ -7,8 +7,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import lombok.Data;
 
 @Entity
+@Data
 public class Book {
 
     @Id
@@ -45,21 +47,9 @@ public class Book {
     @ManyToMany(mappedBy = "books")
 
     //Getters & setters
-    public long getId() {
-        return id;
-    }
-
-    public String getGenre() {
-        return genre;
-    }
-
     public void setGenre(String genre) {
         Preconditions.checkNotNull(genre, "Illegal Argument, parameter is null");
         this.genre = genre;
-    }
-
-    public String getAuthor() {
-        return author;
     }
 
     public void setAuthor(String author) {
@@ -67,17 +57,9 @@ public class Book {
         this.author = author;
     }
 
-    public String getImage() {
-        return image;
-    }
-
     public void setImage(String image) {
         Preconditions.checkNotNull(image, "Illegal Argument, parameter is null");
         this.image = image;
-    }
-
-    public String getTitle() {
-        return title;
     }
 
     public void setTitle(String title) {
@@ -85,17 +67,9 @@ public class Book {
         this.title = title;
     }
 
-    public String getSubtitle() {
-        return subtitle;
-    }
-
     public void setSubtitle(String subtitle) {
         Preconditions.checkNotNull(subtitle, "Illegal Argument, parameter is null");
         this.subtitle = subtitle;
-    }
-
-    public String getPublisher() {
-        return publisher;
     }
 
     public void setPublisher(String publisher) {
@@ -103,17 +77,9 @@ public class Book {
         this.publisher = publisher;
     }
 
-    public String getYear() {
-        return publicationYear;
-    }
-
     public void setYear(String publicationYear) {
         Preconditions.checkNotNull(publicationYear, "Illegal Argument, parameter is null");
         this.publicationYear = publicationYear;
-    }
-
-    public Integer getPages() {
-        return pages;
     }
 
     public void setPages(Integer pages) {
@@ -121,29 +87,8 @@ public class Book {
         this.pages = pages;
     }
 
-    public String getIsbn() {
-        return isbn;
-    }
-
     public void setIsbn(String isbn) {
         Preconditions.checkNotNull(isbn, "Illegal Argument, parameter is null");
-        this.isbn = isbn;
-    }
-
-    //Constructors
-    public Book(){
-
-    }
-    public Book(String genre, String author, String image, String title, String subtitle, String publisher, String publicationYear,
-            Integer pages, String isbn) {
-        this.genre = genre;
-        this.author = author;
-        this.image = image;
-        this.title = title;
-        this.subtitle = subtitle;
-        this.publisher = publisher;
-        this.publicationYear = publicationYear;
-        this.pages = pages;
         this.isbn = isbn;
     }
 }
